@@ -6,7 +6,11 @@ import Link from "next/link";
 import { EMAIL_LIST_ROUTE } from "@/utils/routes";
 
 async function getUserDetails() {
-  const res = await fetch(`${process.env.API_URL_TEST}/api/user/ayo`);
+  const res = await fetch(
+    process.env.PROD_MODE === "test"
+      ? `${process.env.API_URL_TEST}/api/user/ayo}`
+      : `${process.env.API_URL_LIVE}/api/user/ayo}`,
+  );
 
   return res.json();
 }

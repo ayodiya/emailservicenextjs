@@ -18,7 +18,9 @@ interface IAllMessage {
 
 async function getUserEmails() {
   const res = await fetch(
-    `${process.env.API_URL_TEST}/api/message/get-messages/ayo`,
+    process.env.PROD_MODE === "test"
+      ? `${process.env.API_URL_TEST}/api/message/get-messages/ayo}`
+      : `${process.env.API_URL_LIVE}/api/message/get-messages/ayo}`,
   );
 
   return res.json();

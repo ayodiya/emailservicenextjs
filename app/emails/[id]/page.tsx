@@ -27,7 +27,9 @@ export default function ReadEmail() {
 
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL_TEST}/api/message/message-read/${id}`,
+          process.env.NEXT_PUBLIC_PROD_MODE === "test"
+            ? `${process.env.NEXT_PUBLIC_API_URL_TEST}/api/message/message-read/${id}}`
+            : `${process.env.NEXT_PUBLIC_API_URL_LIVE}/api/message/message-read/${id}}`,
         );
 
         if (!res.ok) {
