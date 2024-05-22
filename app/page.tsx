@@ -14,8 +14,6 @@ async function getUserDetails() {
 export default async function Home() {
   const data = await getUserDetails();
 
-  console.log("thia ia ghff", data);
-
   return (
     <Box
       sx={{
