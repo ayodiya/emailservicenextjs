@@ -6,7 +6,17 @@ import Link from "next/link";
 
 import { EMAIL_LIST_ROUTE } from "@/utils/routes";
 
-export default function Home() {
+async function getUserDetails() {
+  const res = await fetch(`${process.env.API_URL_TEST}/api/user/ayo`);
+
+  return res.json();
+}
+
+export default async function Home() {
+  const data = await getUserDetails();
+
+  console.log("thia ia ghff", data);
+
   return (
     <Box
       sx={{
@@ -35,7 +45,8 @@ export default function Home() {
               textAlign: "center",
             }}
           >
-            You have 3 unread messages out of 10 total
+            You have {data?.nameExists?.totalUnreadMessages} unread messages out
+            of {data?.nameExists?.totalMessages} total
           </Box>
           <Box
             sx={{
