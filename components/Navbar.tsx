@@ -7,6 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 import MailIcon from "@mui/icons-material/Mail";
 import axios from "axios";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Notify } from "notiflix/build/notiflix-notify-aio";
 
@@ -19,6 +20,7 @@ interface UserDetails {
 }
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
 
   const getUserDetails = async () => {
@@ -36,7 +38,7 @@ export default function Navbar() {
   };
   useEffect((): void => {
     getUserDetails();
-  }, []);
+  }, [pathname]);
 
   return (
     <Box>
