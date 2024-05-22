@@ -19,7 +19,7 @@ interface UserDetails {
 }
 
 export default function Navbar() {
-  const [data, setData] = useState<UserDetails | null>(null);
+  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
 
   const getUserDetails = async () => {
     try {
@@ -29,7 +29,7 @@ export default function Navbar() {
           : `${process.env.NEXT_PUBLIC_API_URL_LIVE}/api/user/ayo`,
       );
 
-      setData(data);
+      setUserDetails(data);
     } catch (error) {
       Notify.failure("Failed to fetch email details");
     }
@@ -49,7 +49,7 @@ export default function Navbar() {
               fontSize: "24px",
             }}
           >
-            Hello {data?.nameExists?.name.toUpperCase()}
+            Hello {userDetails?.nameExists?.name.toUpperCase()}
           </Box>
           <Box
             sx={{
@@ -63,7 +63,7 @@ export default function Navbar() {
               color="inherit"
             >
               <Badge
-                badgeContent={data?.nameExists?.totalUnreadMessages}
+                badgeContent={userDetails?.nameExists?.totalUnreadMessages}
                 color="error"
               >
                 <MailIcon />
