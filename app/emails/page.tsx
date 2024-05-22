@@ -3,6 +3,9 @@ import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
+import Link from "next/link";
+
+import { EMAIL_LIST_ROUTE } from "@/utils/routes";
 
 export default function Messages() {
   return (
@@ -13,7 +16,11 @@ export default function Messages() {
         paddingTop: "50px",
       }}
     >
-      <Card sx={{ maxWidth: 345, backgroundColor: "secondary.main" }}>
+      <Card
+        component={Link}
+        href={`${EMAIL_LIST_ROUTE}/1`}
+        sx={{ maxWidth: 345, backgroundColor: "secondary.main" }}
+      >
         <CardActionArea>
           <CardContent>
             <Box
