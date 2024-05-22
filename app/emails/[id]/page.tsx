@@ -5,8 +5,9 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
+import axios from "axios";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Notify } from "notiflix/build/notiflix-notify-aio";
 import { ColorRing } from "react-loader-spinner";
 
@@ -21,33 +22,26 @@ export default function ReadEmail() {
   const [message, setMessage] = useState<Message | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect((): void => {
-    (async () => {
-      setLoading(true);
+  const getMessage = useCallback(async () => {
+    setLoading(true);
 
-      try {
-        const res = await fetch(
-          process.env.NEXT_PUBLIC_PROD_MODE === "test"
-            ? `${process.env.NEXT_PUBLIC_API_URL_TEST}/api/message/message-read/${id}}`
-            : `${process.env.NEXT_PUBLIC_API_URL_LIVE}/api/message/message-read/${id}}`,
-        );
+    try {
+      const { data } = await axios.get(
+        process.env.NEXT_PUBLIC_PROD_MODE === "test"
+          ? `${process.env.NEXT_PUBLIC_API_URL_TEST}/api/message/message-read/${id}`
+          : `${process.env.NEXT_PUBLIC_API_URL_LIVE}/api/message/message-read/${id}`,
+      );
 
-        if (!res.ok) {
-          Notify.failure(`Error fetching message: ${res.statusText}`);
-        }
-
-        const data = await res.json();
-        setMessage({
-          subject: data?.messageExists?.subject,
-          content: data?.messageExists?.content,
-          sender: data?.messageExists?.sender,
-        });
-      } catch (error) {
-        Notify.failure("Failed to fetch email details");
-      }
-      setLoading(false);
-    })();
+      setMessage(data?.messageExists);
+    } catch (error) {
+      Notify.failure("Failed to fetch email details");
+    }
+    setLoading(false);
   }, [id]);
+
+  useEffect((): void => {
+    getMessage();
+  }, [id, getMessage]);
 
   return (
     <Box
