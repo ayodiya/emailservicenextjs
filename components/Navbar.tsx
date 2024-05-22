@@ -1,21 +1,42 @@
-"use server";
+"use client";
 
-import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 import MailIcon from "@mui/icons-material/Mail";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Notify } from "notiflix/build/notiflix-notify-aio";
 
-async function getUserDetails() {
-  const res = await fetch(`${process.env.API_URL_TEST}/api/user/ayo`);
-
-  return res.json();
+// Define an interface for the user details
+interface UserDetails {
+  nameExists: {
+    name: string;
+    totalUnreadMessages: number;
+  };
 }
 
-export default async function Navbar() {
-  const data = await getUserDetails();
+export default function Navbar() {
+  const [data, setData] = useState<UserDetails | null>(null);
+
+  const getUserDetails = async () => {
+    try {
+      const { data } = await axios.get(
+        process.env.NEXT_PUBLIC_PROD_MODE === "test"
+          ? `${process.env.NEXT_PUBLIC_API_URL_TEST}/api/user/ayo`
+          : `${process.env.NEXT_PUBLIC_API_URL_LIVE}/api/user/ayo`,
+      );
+
+      setData(data);
+    } catch (error) {
+      Notify.failure("Failed to fetch email details");
+    }
+  };
+  useEffect((): void => {
+    getUserDetails();
+  }, []);
 
   return (
     <Box>
