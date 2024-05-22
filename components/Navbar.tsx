@@ -1,4 +1,4 @@
-"use client";
+"use server";
 
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
@@ -8,7 +8,15 @@ import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 import MailIcon from "@mui/icons-material/Mail";
 
-export default function Navbar() {
+async function getUserDetails() {
+  const res = await fetch(`${process.env.API_URL_TEST}/api/user/ayo`);
+
+  return res.json();
+}
+
+export default async function Navbar() {
+  const data = await getUserDetails();
+
   return (
     <Box>
       <AppBar elevation={0} position="static">
@@ -20,7 +28,7 @@ export default function Navbar() {
               fontSize: "24px",
             }}
           >
-            Hello Name
+            Hello {data?.nameExists?.name.toUpperCase()}
           </Box>
           <Box
             sx={{
@@ -33,7 +41,10 @@ export default function Navbar() {
               aria-label="show 4 new mails"
               color="inherit"
             >
-              <Badge badgeContent={4} color="error">
+              <Badge
+                badgeContent={data?.nameExists?.totalUnreadMessages}
+                color="error"
+              >
                 <MailIcon />
               </Badge>
             </IconButton>
